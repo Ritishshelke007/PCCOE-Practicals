@@ -9,6 +9,8 @@ class bank{
     float blnc, dep, with;
     int acc;
 
+
+
     bank(){
         cout<<"-----Bank Database------"<<endl;
         cout<<"Enter Name : "<<endl;
@@ -66,6 +68,7 @@ int main(int argc, char const *argv[])
         case 1:
             b1.display();
             break;
+
 
         case 2:
             b1.deposit();
