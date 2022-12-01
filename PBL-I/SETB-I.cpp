@@ -13,6 +13,7 @@ public:
     void read();
     void display();
     void unionofsets(Set c);
+    void intersection(Set c);
 
 };
 
@@ -71,8 +72,38 @@ void Set :: unionofsets(Set setB){
         }
          
     }
+
+
 }
 
+    void Set :: intersection(Set setB){
+        int n2 = setB.n;
+        int flag,count=0;
+        for (int i = 0; i < n; i++)
+        {
+            flag=0;
+            for (int j = 0; j < n2; j++)
+            {
+                if (name[i]==setB.name[j])
+                {
+                    flag=1;
+                    break;
+                }
+                
+            }
+            if (flag==1)
+            {
+                count++;
+                cout << name[i] << "\t";              
+            }
+        }
+        
+            if (count==0)
+            {
+                cout << "None"<< endl;
+            }
+
+    }
 
 int main(){
 
@@ -90,6 +121,10 @@ int main(){
 
     cout << "\n\nSet of customers who like either pizza or burger or both : "<<endl;
     setA.unionofsets(setB);
+
+    cout << "\n\nSet of customers who like both pizza and burger : "<<endl;
+    setA.intersection(setB);
+
 
 
 
