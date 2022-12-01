@@ -2,84 +2,98 @@
 
 using namespace std;
 
-class sets{
-    int cust;
+class Set
+{
+private:
+    int n;
     string name[20];
-    
-    public:
-    
-    void add_cust(){
-    cout<<"Enter number of customers : ";
-    cin >> cust;       
 
-    for(int i = 0; i<cust ; i++){
-        cout << "Enter customer no " <<i<< " : ";
-        cin >> name[i];
-    }
-        
-    }
-    
-    void display(){
-        cout << "Display elements of set \n";
-        for( int i = 0 ; i<cust ; i++){
-            cout << name[i] << "\t";
-        }
-        
-    }
-    
-    sets ABUnion(sets setB){
-        sets temp;
-        int k = 0, count[setB.cust]={0};
-        
-        
-        for(int i = 0; i< cust; i++){
-            temp.name[i]=name[i];
-            k++;
-        }
-        
-        for(int i = 0; i < cust; i++){
-            for(int j = 0; j < setB.cust ; j++){
-                if(temp.name[i]==setB.name[j]){
-                    count[j]++;
-                    
-                }
-            }
-        }
-        
-        for(int i = 0; i<setB.cust; i++){
-            if(count[i]==0){
-                temp.name[k]=setB.name[i];
-                k++;
-            }
-        }
-        temp.cust=k+1;
-        return temp;
-    }
-    
-    
+
+public:
+    void read();
+    void display();
+    void unionofsets(Set c);
+
 };
 
-int main()
-{
-    sets setA;
-    sets setB;
-    sets ABUnion;
-    sets c;
-    
-    cout << "Insert setA : \n";
-    setA.add_cust();
-    //setA.display();
-    
-    
-    cout << "\nInsert setB : \n";
-    setB.add_cust();
-    //setB.display();
-    
-    cout << "Union operation of setA and setB : \n";
-    c = setA.ABUnion(setB);
-    c.display();
+void Set :: read(){
+    cout << "Enter no of customers : ";
+    cin >> n;
+    cout << "Enter name of customers  : \n";
+    for (int i = 0; i < n; i++)
+    {
+        cin >> name[i];
+    }  
+}
 
+void Set :: display(){
+    cout << "Displaying elements of set  : "<<endl;
+    for (int i = 0; i < n; i++)
+    {
+    cout << name[i] << "\t";
+       
+    }
+}
+
+void Set :: unionofsets(Set setB){
+    int n2 = setB.n;
+    Set temp;
+    int flag;
+    //cout << n2;
+    // printing elements of set a
+    for (int i = 0; i < n; i++)
+    {
+        temp.name[i]=name[i];
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+        cout << temp.name[i] << "\t";
+    }
     
-    
+
+    //checking common elements in both set
+    for (int j = 0; j < n2; j++)
+    {
+    flag = 0;
+        for (int k = 0; k < n; k++)
+        {
+            if (setB.name[j]==temp.name[k])
+            {
+                flag=1;
+                break;
+                
+            } 
+        }
+        if (flag!=1)
+        {
+            cout << setB.name[j] << "\t";
+        }
+         
+    }
+}
+
+
+int main(){
+
+    Set setA;
+    Set setB;
+    Set c;
+
+    cout << "Enter customers who likes pizza : "<<endl;
+    setA.read();
+    //setA.display();
+
+    cout << "\nEnter customers who likes Burger : "<<endl;
+    setB.read();
+    //setB.display();
+
+    cout << "\n\nSet of customers who like either pizza or burger or both : "<<endl;
+    setA.unionofsets(setB);
+
+
+
+
+
     return 0;
 }
