@@ -14,6 +14,7 @@ void push(int data){
     if (newNode==NULL)
     {
         cout << "Stack overflow";
+        return;
     }
 
     newNode->next = top;
