@@ -1,12 +1,3 @@
-/*
-Date:23-11-2022
-Programmer:Pranav Kulkarni
-Title:Write a program using C++ to create a student database system containing the following 
-information: Name, roll number, Class, division, Date of Birth, Blood group, Contact address, 
-telephone number. Use Class, object, inline function. Use static variables and static functions 
-to maintain count of the number of students. Use constructor and destructor
-
-*/
 #include <iostream>
 #define max 30  
 using namespace std;
