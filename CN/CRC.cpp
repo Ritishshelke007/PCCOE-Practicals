@@ -1,74 +1,135 @@
- #include<iostream>
+
+#include <iostream>
+
 using namespace std;
 
-void division(int temp[],int gen[],int n,int r)
-{
- for(int i=0;i<n;i++)
- {
-     if (gen[0]==temp[i])
-     {
-         for(int j=0,k=i;j<r+1;j++,k++)
-             if(!(temp[k]^gen[j]))
-                 temp[k]=0;
-             else
-                 temp[k]=1;
-     } 
- }
-}
+class crc{
+    public:
+    
+    int data_bits, divisor_bits, dataword[20], divisor[20], temp[20];
+    
+    void getData(){
+        cout << "***Connected with receiver enter data to send***\n";
+        cout << "Enter Dataword size : ";
+        cin >> data_bits;
+        
+        cout << "Enter Divisor size : ";
+        cin >> divisor_bits;
+        
+        cout << "Enter dataword : ";
+        for(int i=0; i<data_bits; i++){
+            cin >> dataword[i];
+        }
+        
+        cout << "Enter divisor : ";
+        for(int i=0; i<divisor_bits; i++){
+            cin >> divisor[i];
+        }
+        
+        divisor_bits--;
+        
+        
+         for(int i=0;i<divisor_bits;i++)
+            dataword[data_bits+i] = 0;
+            
+            
+        for(int i=0;i<data_bits+divisor_bits;i++)
+            temp[i] = dataword[i];
+            
+        exor_divide(temp, divisor, data_bits, divisor_bits);
+    }
+    
+    
+    
+    
+    void display(){
+        cout << "dataword : ";
+        for(int i=0; i<data_bits; i++){
+            cout << dataword[i];
+        }
+        
+        cout << "divisor : ";
+        for(int i=0; i<divisor_bits; i++){
+            cout << divisor[i];
+        }
+    }
+    
+    void exor_divide(int temp[],int divisor[],int data_bits,int divisor_bits)
+        {
+         for(int i=0;i<data_bits;i++)
+         {
+             if (divisor[0]==temp[i])
+             {
+                 for(int j=0,k=i;j<divisor_bits+1;j++,k++)
+                     if(!(temp[k]^divisor[j]))
+                         temp[k]=0;
+                     else
+                         temp[k]=1;
+             } 
+         }
+        }
+        
+        
+    void send_message(){
+         cout<<"Genaerated CRC : ";
+             for(int i=0;i<divisor_bits;i++)
+             {
+                 cout<<temp[data_bits+i]<<" ";
+                 dataword[data_bits+i] = temp[data_bits+i];
+             }
+             
+             cout<<endl<<"Sending  Message  as : ";
+             for(int i=0;i<data_bits+divisor_bits;i++){
+                 
+                 cout<<dataword[i]<<" ";
+             }
+    }
+    
+    void receiver(){
+        cout << endl << endl;
+        cout << "***Receiving data***"<<endl;
+        
+        cout<<"Enter the message received to you to check error : ";
+         
+         for(int i=0;i<data_bits+divisor_bits;i++){
+             cin>>dataword[i];
+         }
+         
+             
+         for(int i=0;i<data_bits+divisor_bits;i++)
+             temp[i] = dataword[i];
+             
+         exor_divide(temp,divisor,data_bits,divisor_bits);
+         
+         for(int i=0;i<divisor_bits;i++)
+         {
+             if(temp[data_bits+i])
+             {
+                 cout<<"**Message is discarded due to error**";
+             }
+        }
+        
+         cout<<"Decoded successfully no error found** : ";
+         cout << "Message Send by receiver : " << endl;
+         for(int i=0; i<data_bits; i++){
+             
+             cout<<dataword[i]<<" ";
+             
+         }
+    }
+    
+};
+
 
 int main()
 {
+    crc obj;
     
-int n,r,message[50],gen[50],temp[50];
- cout<<"Enter the number of message bits : ";
- cin>>n;
- cout<<"Enter the number of generator bits : ";
- cin>>r;
- 
- cout<<"Enter the message : ";
- for(int i=0;i<n;i++)
-     cin>>message[i];
- cout<<"Enter the generator : ";
- for(int i=0;i<r;i++)
-     cin>>gen[i];
- r--;
- 
- for(int i=0;i<r;i++)
-     message[n+i] = 0;
- for(int i=0;i<n+r;i++)
-     temp[i] = message[i];
- division(temp,gen,n,r);
- cout<<"CRC : ";
- for(int i=0;i<r;i++)
- {
-     cout<<temp[n+i]<<" ";
-     message[n+i] = temp[n+i];
- }
- cout<<endl<<"Transmitted Message : ";
- for(int i=0;i<n+r;i++)
-     cout<<message[i]<<" ";
-     
- cout<<endl<<endl<<"At Receiver's End "<<endl;
- 
- cout<<"Enter the received message : ";
- 
- for(int i=0;i<n+r;i++)
-     cin>>message[i];
-     
- for(int i=0;i<n+r;i++)
-     temp[i] = message[i];
-     
- division(temp,gen,n,r);
- 
- for(int i=0;i<r;i++)
- {
-     if(temp[n+i])
-     {
-         cout<<"Error detected messsage discarded";
-         return 0;
-     } }
- cout<<"No error .\nReceived Message : ";
- for(int i=0;i<n;i++)
-     cout<<message[i]<<" ";
- return 0;
+    obj.getData();
+    
+    obj.send_message();
+    
+    obj.receiver();
+    
+    return 0;
 }
