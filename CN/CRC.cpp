@@ -1,121 +1,74 @@
-#include<iostream>
-#include<string.h>
+ #include<iostream>
 using namespace std;
 
-class CRC {
-	
+void division(int temp[],int gen[],int n,int r)
+{
+ for(int i=0;i<n;i++)
+ {
+     if (gen[0]==temp[i])
+     {
+         for(int j=0,k=i;j<r+1;j++,k++)
+             if(!(temp[k]^gen[j]))
+                 temp[k]=0;
+             else
+                 temp[k]=1;
+     } 
+ }
+}
 
-	string input,divisor,divident,result;
-	
-	int len_divident, len_gen, len_inp;
-
-public:
-	string fun_xor(string a,string b)
-	{
-		string result="";
-		if(a[0]=='0')
-		return a.substr(1);
-		else
-		{
-			for(int i=0;i<len_gen;i++)
-			{
-				result=result+(a[i]==b[i]?'0':'1');
-			}
-			
-			return result.substr(1);
-		}
-	}
-	void  modulo_div()
-	{
-		
-		string temp_div=divisor;
-		string temp_divident=divident.substr(0,len_gen);
-		int j=len_gen;
-		while(j<len_divident)
-		{
-			temp_divident=fun_xor(temp_divident,temp_div);
-			temp_divident=temp_divident+divident[j];
-			j++;
-		}
-		result=input+fun_xor(temp_divident, temp_div);
-	
-		
-	}
-	void getdata()
-	{
-		
-		cout<<"\nEnter Input: ";
-		cin>>input;
-		cout<<"\nEnter coefficients of generator polynomial: ";
-		cin>>divisor;
-		
-		len_gen=divisor.length();
-		len_inp=input.length();
-		divident=input;
-		int r=len_gen-1;
-		for(int i=0;i<r;i++)
-		{
-			divident=divident+'0';		
-		}
-		len_divident=divident.length();
-		
-		modulo_div();
-		
-		
-		
-	}
-	void sender_side()
-	{
-		cout<<"Input: "<<input<<"\n";
-		cout<<"Polynomial: "<<divisor<<"\n";
-		cout<<"Divident: "<<divident<<"\n";
-		cout<<"Data to send: "<<result<<"\n";
-		
-	}
-	void receiver_side()
-	{
-		string data_rec;
-		cout<<"\nEnter Data Received: ";
-		cin>>data_rec;
-
-		string temp_div=divisor;
-		string temp_divident=data_rec.substr(0,len_gen);
-		int j=len_gen;
-		while(j<data_rec.length())
-		{
-			temp_divident=fun_xor(temp_divident,temp_div);
-			temp_divident=temp_divident+data_rec[j];
-			j++;
-		}
-		string error=fun_xor(temp_divident, temp_div);
-		cout<<"reminder is: "<<error;
-
-		bool flag=0;
-		for(int i=0;i<len_gen-1;i++)
-		{
-			if(error[i]=='1')
-			{
-				flag=1;
-				break;
-			}
-		}
-		if(flag==0)
-		cout<<"\nCorrect Data Received Without Any Error";
-		else
-		cout<<"\nData Received Contain Some  Error";
-			
-		
-		
-	}
-
-	
-
-};
- int main() {
-	// TODO Auto-generated method stub
-	 CRC crc;
-	 crc.getdata();
-	 crc.sender_side();
-	 crc.receiver_side();
-	 return 0;
+int main()
+{
+    
+int n,r,message[50],gen[50],temp[50];
+ cout<<"Enter the number of message bits : ";
+ cin>>n;
+ cout<<"Enter the number of generator bits : ";
+ cin>>r;
+ 
+ cout<<"Enter the message : ";
+ for(int i=0;i<n;i++)
+     cin>>message[i];
+ cout<<"Enter the generator : ";
+ for(int i=0;i<r;i++)
+     cin>>gen[i];
+ r--;
+ 
+ for(int i=0;i<r;i++)
+     message[n+i] = 0;
+ for(int i=0;i<n+r;i++)
+     temp[i] = message[i];
+ division(temp,gen,n,r);
+ cout<<"CRC : ";
+ for(int i=0;i<r;i++)
+ {
+     cout<<temp[n+i]<<" ";
+     message[n+i] = temp[n+i];
+ }
+ cout<<endl<<"Transmitted Message : ";
+ for(int i=0;i<n+r;i++)
+     cout<<message[i]<<" ";
+     
+ cout<<endl<<endl<<"At Receiver's End "<<endl;
+ 
+ cout<<"Enter the received message : ";
+ 
+ for(int i=0;i<n+r;i++)
+     cin>>message[i];
+     
+ for(int i=0;i<n+r;i++)
+     temp[i] = message[i];
+     
+ division(temp,gen,n,r);
+ 
+ for(int i=0;i<r;i++)
+ {
+     if(temp[n+i])
+     {
+         cout<<"Error detected messsage discarded";
+         return 0;
+     } }
+ cout<<"No error .\nReceived Message : ";
+ for(int i=0;i<n;i++)
+     cout<<message[i]<<" ";
+ return 0;
 }
