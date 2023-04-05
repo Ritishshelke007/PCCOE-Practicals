@@ -4,11 +4,13 @@
     class server{  
     public static void main(String args[])throws Exception{  
 
+    // at server side create a serversocket and socket to accept request of clien 
     ServerSocket ss=new ServerSocket(PORT_NUMBER);  
     Socket s=ss.accept();  
 
     System.out.println("Client connected!");
-
+    
+    // set streams to read and write 
     DataInputStream din=new DataInputStream(s.getInputStream());  
     DataOutputStream dout=new DataOutputStream(s.getOutputStream());  
     BufferedReader br=new BufferedReader(new InputStreamReader(System.in));  
