@@ -17,6 +17,14 @@ section .data
 	msg6 db 10,10,"Equivalent HEX number : "
 	msg6_len equ $-msg6 
 	
+	msg7 db 10,10, "invalid input "
+	msg7_len equ $-msg7
+	
+	msg8 db 10,10, "Enter HEX number : "
+	msg8_len equ $-msg8
+	
+	msg9 db 10,10, "Equivalent BCD number is : ";
+	msg9_len equ $-msg9
 	
 	
 	
@@ -73,11 +81,12 @@ _start:
 	
 	L2: 
 	print msg4, msg4_len
+	call BCD_TO_HEX
 	Exit
 	
 	L1: 
 	print msg3,msg3_len
-	call BCD_TO_HEX
+	call HEX_TO_BCD
 	Exit	
 		
 	
@@ -87,6 +96,43 @@ _start:
 	
 	
 ;--------------------------------------------------------
+HEX_TO_BCD:
+	print msg8,msg8_len
+	call accept_16    ; accept hex number from procedure
+	
+	mov ax,bx     ; move bx data in ax ( hex number)
+	
+	mov bx,10 	; divide by 10 
+	xor bp,bp  	; counter
+	
+back:
+	xor dx,dx	; remainder is stored in dx
+	div bx		; divide ax by 10 store quotient in ax and remainder in dx
+	push dx		; push remainder on stack
+	inc bp		; increment counter 
+	
+	cmp ax,0	; check quotient is 0 if 0 means number end 
+	jne back
+	
+	print msg9,msg9_len
+	
+
+back1:	pop	dx			;pop last digit pushed on stack
+	add	dl,30h			;add 30 to digit to make them decimal
+	mov	[char_ans],dl		;print digit
+	print	char_ans,1
+
+	dec	bp	
+	jnz	back1			;mov to next digit
+
+
+RET
+;--------------------------------------------------------
+
+
+
+;-----------------------------------------------------------
+	
 BCD_TO_HEX:
 	print msg5,msg5_len
 	Read buf,6 
@@ -129,7 +175,7 @@ next_digit:
 	JBE	add30
 	ADD	DL,07H
 
-add30	:
+add30:
 	ADD	DL,30H
 	MOV	[RSI],DL
 
@@ -140,3 +186,45 @@ add30	:
 	print	char_ans,4
 ret
 ;--------------------------------------------------------
+accept_16:
+	Read buf,5     ;read 4 digit + 1 enter key
+	
+	mov rcx,4      ;counter
+	mov rsi,buf    ; rsi points to 1st number in buffer
+	xor bx,bx      ;store 0 in bx
+	
+next_byte:
+	shl bx,4
+	mov al,[rsi]
+	
+	
+	cmp al,'0'
+	jb error
+	cmp al,'9'
+	jbe sub30
+	
+	cmp al,'A'
+	jb error
+	cmp al,'F'
+	jbe sub37
+	
+	cmp al,'a'
+	jb error
+	cmp al,'f'
+	jbe sub57
+	
+	
+error:
+	print msg7,msg7_len
+	Exit
+	
+sub57: sub al,20h 
+sub37: sub al,07h
+sub30: sub al,30h
+
+add  bx,ax
+inc rsi
+dec rcx
+jnz next_byte
+
+ret
