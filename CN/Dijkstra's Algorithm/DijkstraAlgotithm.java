@@ -57,7 +57,7 @@ public class DijkstraAlgorithm {
         int[][] graph = new int[numNodes][numNodes];
         for (int i = 0; i < numEdges; i++) {
             System.out.println("\nEnter the details for edge " + (i + 1) + ":");
-            System.out.print("\nSource: ");
+            System.out.print("Source: ");
             int source = scanner.nextInt();
             System.out.print("Destination: ");
             int destination = scanner.nextInt();
