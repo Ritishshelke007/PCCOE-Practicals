@@ -1,53 +1,40 @@
 import java.net.*;
-import java.util.Scanner;
-import java.io.*; 
-import java.lang.*; 
+import java.io.*;  
 
 
-    class Client{  
-    public static void main(String args[])throws Exception{  
-    Scanner sc = new Scanner(System.in);
+class Client{  
+public static void main(String args[])throws Exception{ 
+    
+int n;
+//int rec_frame_data[] = new int[5];
 
-    Socket s = new Socket("localhost",3334);
+System.out.println("======Client======");
+Socket s=new Socket("localhost",4444);  
 
-    int n, change_index;
-    int frame_data[] = {50,100,40,15,85};
+DataInputStream din=new DataInputStream(s.getInputStream());  
+DataOutputStream dout=new DataOutputStream(s.getOutputStream());  
 
+n  = din.read();
 
-    DataInputStream din=new DataInputStream(s.getInputStream());  
-    DataOutputStream dout=new DataOutputStream(s.getOutputStream());  
+int rec_frame_data[] = new int[n];
 
-    BufferedReader br=new BufferedReader(new InputStreamReader(System.in));  
-      
+System.out.println("No of frames you will be recieving from Server are : "+n);
+System.out.println("---------------Ready to receive frames------------\n");
 
-    System.out.println("How many frames do you want to send");
-    n = sc.nextInt();
+for(int i=0; i<n; i++){
+    rec_frame_data[i]  = din.read();
+        System.out.println("Frame no : "+ i + " Received data : "+ rec_frame_data[i]);
+}
 
-    dout.write(n);
+System.out.println("----Receiving again----");
 
-    for(int i=0; i<n; i++){
-        //Thread.sleep(1000);
-        System.out.println("Sending Frame no : "+i+ " Data is : "+frame_data[i]);
-        dout.write(frame_data[i]);
-    }
-
-    System.out.println("All frames are sent !");
-
-    System.out.println("Enter frame no to change data ");
-    change_index = sc.nextInt();
-
-
-    frame_data[change_index] = 0;
-    // dout.write(change_index);
-    // dout.write(frame_data[change_index]);
+for(int i=0; i<n; i++){
+    rec_frame_data[i]  = din.read();
+    System.out.println("Frame no : "+ i + " Received data : "+ rec_frame_data[i]);
+}
 
 
-    for(int j=0; j<n; j++){
-        // Thread.sleep(1000);
-        System.out.println("Sending Frame no : "+j+ " Data is : "+frame_data[j]);
-        dout.write(frame_data[j]);
-    }
+din.close();  
+s.close();  
 
-    dout.close();  
-    s.close();  
-    }}  
+}}  
