@@ -1,55 +1,54 @@
 import java.net.*;
-import java.io.*;  
-import java.lang.*;
+import java.util.Scanner;
+import java.io.*; 
 
-class Server{  
-public static void main(String args[])throws Exception{ 
+
+    class Server{  
+    public static void main(String args[])throws Exception{  
+    Scanner sc = new Scanner(System.in);
+
+    System.out.println("======Server======");
+    ServerSocket ss = new ServerSocket(4444);
+    Socket s = ss.accept();
+    System.out.println("Client Connected!");
+
+    DataInputStream din=new DataInputStream(s.getInputStream());  
+    DataOutputStream dout=new DataOutputStream(s.getOutputStream());  
     
-int n;
-int rec_frame_data[] = new int[5];
+    int n, change_index;
+   // int frame_data[] = {50,100,40,15,85};
 
-ServerSocket ss=new ServerSocket(3334);  
-Socket s=ss.accept();  
+    System.out.println("How many frames do you want to send");
+    n = sc.nextInt();
 
-System.out.println("Client connected!");
+    int frame_data[] = new int[n];
 
-DataInputStream din=new DataInputStream(s.getInputStream());  
-DataOutputStream dout=new DataOutputStream(s.getOutputStream());  
-BufferedReader br=new BufferedReader(new InputStreamReader(System.in));  
-
-n  = din.read();
-System.out.println("No of frames you will be recieving from client are : "+n);
-System.out.println("---------------Ready to receive frames------------\n");
-
-for(int i=0; i<n; i++){
-    rec_frame_data[i]  = din.read();
-   // Thread.sleep(1200);
-    System.out.println("Frame no : "+ i + " Received data : "+ rec_frame_data[i]);
-}
-
-// if(i==(n-1)){
-//     System.out.println("-----All frames are received!-----");
-// }
-// else{
-//     System.out.println("May one or more frames are list");
-// }
-
-System.out.println("Receiving again----");
-
-for(int i=0; i<n; i++){
-    rec_frame_data[i]  = din.read();
-    // Thread.sleep(1200);
-    System.out.println("Frame no : "+ i + " Received data : "+ rec_frame_data[i]);
-}
+    System.out.println("Enter data frames");
+    for(int i=0;i<n;i++){
+        frame_data[i] =  sc.nextInt();
+    }
 
 
-// int changed_add = din.read();
-// System.out.println(changed_add);
+    dout.write(n);
 
-// int changed_val = din.read();
-// System.out.println("Changed to : "+changed_val);
+    for(int i=0; i<n; i++){
+        System.out.println("Sending Frame no : "+i+ " Data is : "+frame_data[i]);
+        dout.write(frame_data[i]);
+    }
 
-din.close();  
-s.close();  
-ss.close();  
-}}  
+    System.out.println("All frames are sent !");
+
+    System.out.println("Enter frame no to change data ");
+    change_index = sc.nextInt();
+
+
+    frame_data[change_index] = -1;
+ 
+    for(int j=0; j<n; j++){
+        System.out.println("Sending Frame no : "+j+ " Data is : "+frame_data[j]);
+        dout.write(frame_data[j]);
+    }
+
+    dout.close();  
+    s.close();  
+    }}  
