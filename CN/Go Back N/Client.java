@@ -1,62 +1,70 @@
+import java.util.*;
+import java.io.*;
 import java.net.*;
-import java.util.Scanner;
-import java.io.*; 
-import java.lang.*; 
 
 
-class Client{  
-    public static void main(String args[])throws Exception{  
-    Scanner sc = new Scanner(System.in);
+public class Client {
+    public static void main(String[] args) throws UnknownHostException, IOException {
+        Scanner sc = new Scanner(System.in);
+        int j=0;
+        int check=0;
 
-    Socket s = new Socket("localhost",3334);
+        System.out.println("=======Client=======");
 
-    int n, change_index,j;
-    //int frame_data[] = {50,100,40,15,85};
+        Socket s = new Socket("localhost",4444);
+
+        DataInputStream in = new DataInputStream(s.getInputStream());
+        DataOutputStream out = new DataOutputStream(s.getOutputStream());
+
+        System.out.println("Enter number of frames to receive : ");
+        int frames = sc.nextInt();
 
 
-    DataInputStream din=new DataInputStream(s.getInputStream());  
-    DataOutputStream dout=new DataOutputStream(s.getOutputStream());  
+        out.write(frames);
+        out.flush();
 
-    BufferedReader br=new BufferedReader(new InputStreamReader(System.in));  
-      
+        System.out.println("Type of Transmission : \n0. Without Error\n1. With Error");
+        int choice = sc.nextInt();
 
-    System.out.println("How many frames do you want to send");
-    n = sc.nextInt();
+        out.write(choice);
+        out.flush();
 
-    dout.write(n);
 
-    for(int i=0; i<n; i++){
-        //Thread.sleep(1000);
-        if(i==2){
-            System.out.println("Sending frame number "+i);
+        if(choice==0){
+
+            for(j=0;j<frames;j++){
+                int i = in.read();
+                System.out.println("Received frame no : "+i);
+                System.out.println("Sending ACK of frame : "+i);
+                out.write(i);
+                out.flush();
+                System.out.println("\n");
+            }
         }
         else{
+            for(j=0;j<frames;j++){
+                int i = in.read();
 
-            System.out.println("Sending Frame no : "+i);
-            dout.write(i);
-            
-            j = din.read();
-            System.out.println("Acknowledment received for : "+j);
+                if(i==check){
+                    System.out.println("\nReceived frame no : "+i);
+                    System.out.println("Sending ACK of frame : "+i);
+                    out.write(i);
+                    out.flush();
+                    check++;
+                }
+                else{
+                    --j;
+                    System.out.println("Discarded frame no : "+i);
+                    System.out.println("Sending negative ACK");
+                    out.write(-1);
+                    out.flush();
+                }
+            }
+
+
         }
+
+        
     }
-
-    //System.out.println("All frames are sent !");
-
-    // System.out.println("Enter frame no to change data ");
-    // change_index = sc.nextInt();
-
-
-    //frame_data[change_index] = 0;
-    // dout.write(change_index);
-    // dout.write(frame_data[change_index]);
-
-
-    // for(int j=0; j<n; j++){
-    //     // Thread.sleep(1000);
-    //     System.out.println("Sending Frame no : "+j+ " Data is : "+j);
-    //     dout.write(j);
-    // }
-
-    dout.close();  
-    s.close();  
-    }}
+    
+}
