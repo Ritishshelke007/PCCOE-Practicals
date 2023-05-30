@@ -1,0 +1,83 @@
+import java.util.*;
+
+import java.io.*;
+
+import java.net.*;
+
+public class subnet{
+
+;
+
+	public static void main(String args[]){
+
+	
+
+		Scanner sc=new Scanner(System.in);
+
+		String uip;
+
+		String sbinaryArray[]=new String[4];
+
+		String sipArray[]=new String[4];
+
+		int intipArray[]=new int[4];
+
+		
+
+		System.out.println("Enter the class C ip to get the subnet mask and range :");
+
+		uip=sc.next();
+
+		
+
+		 sipArray = uip.split("\\."); 
+
+		for(int i=0;i<4;i++){
+
+			intipArray[i]=Integer.parseInt(sipArray[i]);
+
+		}
+
+		System.out.println("enter number of subnets you want :");
+
+		int noSubnet=sc.nextInt();
+
+		int noOfAvailable=256-intipArray[3];
+
+		int noOfNodes=noOfAvailable/noSubnet;
+
+	
+
+		for(int i=0;i<noSubnet;i++){
+
+        if(i>0){
+
+            intipArray[3]= intipArray[3]+1;
+
+        }
+
+			System.out.print(intipArray[0]+"."+intipArray[1]+"."+intipArray[2]+"."+intipArray[3]+"--");
+
+		
+
+			intipArray[3]=intipArray[3]+noOfNodes;
+
+			if(intipArray[3]>255){
+
+				intipArray[3]=255;
+
+			}
+
+			
+
+			System.out.print(intipArray[3]+"\n");
+
+		}
+
+		
+
+		
+
+	}
+
+}
