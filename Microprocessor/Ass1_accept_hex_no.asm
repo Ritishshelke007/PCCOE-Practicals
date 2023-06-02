@@ -7,8 +7,7 @@ section .data
 section .bss
 	array resd 200
 	counter resb 1
-	
-	
+		
 %macro print 2
 mov rax,1
 mov rdi,1
