@@ -3,7 +3,7 @@ section .data
 	msg_len equ $-msg
 
 	smsg db 10,10,"Length of string is :"
-	$smsg_len equ $-smsg
+	smsg_len equ $-smsg
 
 section .bss
 	string resb 50
