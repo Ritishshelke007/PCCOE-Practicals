@@ -1,0 +1,72 @@
+//Client side...
+import java.lang.System;
+import java.net.*;
+import java.io.*;
+import java.util.Random;
+
+public class SRClient
+{
+	static Socket connection;
+	public static void main(String args[]) throws SocketException
+	{
+		try
+		{
+			int vArr[] = new int[8];
+			int n = 0;
+
+			Random rands = new Random();
+			int rand=0;
+
+			System.out.println("==============================================================================");
+			InetAddress addr = InetAddress.getByName("localhost");
+
+			System.out.println("Connection on==> " + addr);
+
+			connection = new Socket(addr,1024);
+
+			DataOutputStream dout = new DataOutputStream(connection.getOutputStream());
+			DataInputStream din = new DataInputStream(connection.getInputStream());
+
+			System.out.println("==============================================================================");
+
+			int p = din.read();
+			System.out.println("Number of frames to be received are==> "+ p);
+			System.out.println("==============================================================================");
+			for(int i=0;i<p;i++)
+{
+				vArr[i] = din.read();
+				System.out.println("Frame No. is==> "+vArr[i]);
+			}	
+			
+			rand = rands.nextInt(p);
+			
+			vArr[rand]=-1;
+			System.out.println("==============================================================================");
+			for(int i=0;i<p;i++)
+			{
+					System.out.println("Received Frame is==> " + vArr[i]);
+			}
+			System.out.println("==============================================================================");
+			for(int i=0;i<p;i++)
+			{
+				if(vArr[i]==-1)
+				{
+					System.out.println("Sending request to retransmit the packet "+(i+1)+" again!");
+					n=i;
+					dout.write(n);
+					dout.flush();
+				}
+			}
+			
+			System.out.println("==============================================================================");
+			vArr[n] = din.read();
+			System.out.println("Received frame is==>" + vArr[n]);
+			System.out.println("==============================================================================");
+System.out.println("Disconnecting!!");
+		}	
+		catch(IOException e)
+		{
+			System.out.println(e);
+		}
+	}
+}
