@@ -25,7 +25,7 @@ public class DijkstraAlgorithm {
         }
 
         // Print the shortest distances
-                System.out.println("============================");
+        System.out.println("============================");
 
         System.out.println("Vertex\tDistance from Source\n");
         for (int i = 0; i < numVertices; i++) {
@@ -51,20 +51,19 @@ public class DijkstraAlgorithm {
 
         System.out.print("Enter the number of edges: ");
         int numEdges = scanner.nextInt();
- 
-        
 
         int[][] graph = new int[numNodes][numNodes];
         for (int i = 0; i < numEdges; i++) {
             System.out.println("\nEnter the details for edge " + (i + 1) + ":");
-            System.out.print("Source: ");
-            int source = scanner.nextInt();
-            System.out.print("Destination: ");
-            int destination = scanner.nextInt();
+            System.out.print("Node 1: ");
+            int node1 = scanner.nextInt();
+            System.out.print("Node 2: ");
+            int node2 = scanner.nextInt();
             System.out.print("Weight: ");
             int weight = scanner.nextInt();
 
-            graph[source][destination] = weight;
+            graph[node1][node2] = weight;
+            graph[node2][node1] = weight; // Add the reverse edge for an undirected graph
         }
 
         System.out.println("\nEnter the starting node: ");
