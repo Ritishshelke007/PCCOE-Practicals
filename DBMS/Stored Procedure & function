@@ -1,0 +1,95 @@
+1...
+PL/SQL BLOCK
+declare
+mroll number(5);
+name_of_book varchar(50);
+issue_date date;
+no_of_days number(5);
+today_date date;
+fine_amt number(5);
+begin
+-- step 1 : accept input
+mroll:=&mroll;
+name_of_book:='&name_of_book';
+select date_of_issue into issue_date from borrower where roll_no=mroll and
+book_name=name_of_book;
+dbms_output.put_line('issue date is '||issue_date);
+select sysdate into today_date from dual;
+dbms_output.put_line('Today date is '||today_date);
+no_of_days:=trunc(today_date)-issue_date;
+dbms_output.put_line('No of days is '||no_of_days);
+-- step 2 calculate fine amount
+ IF no_of_days > 30 THEN
+ fine_amt := 75 + 50 * (no_of_days - 30);
+ ELSIF no_of_days > 15 THEN
+ fine_amt := 5 * (no_of_days - 15);
+ ELSE
+ fine_amt := 0;
+ END IF;
+dbms_output.put_line('Fine '||fine_amt);
+-- step 3 change status
+update borrower set status='R' where roll_no=mroll;
+-- step 4 if fine applicable insert into fine table
+IF fine_amt > 0 THEN
+insert into fine (roll_no,f_date,amt) values (mroll,today_date,fine_amt);
+END IF;
+end;
+
+2..
+function:
+create or replace function fun_bank(macc number,mbname varchar)
+return number
+is
+mstatus varchar(10);
+begin
+select acc_status into mstatus from acc_details where acc_no=macc and b_name=mbname;
+if mstatus='active' then
+return 1;
+elsif mstatus='inactive' then
+return 0;
+end if;
+end;
+pl/sql block:
+declare
+macc acc_details.acc_no%type;
+mbname acc_details.b_name%type;
+ch number(1);
+begin
+macc := &macc;
+mbname := '&mbname';
+select acc_no, b_name into macc,mbname from acc_details where acc_no=macc and
+b_name=mbname;
+ch := fun_bank(macc,mbname);
+if ch=1 then
+dbms_output.put_line('Account is active');
+insert into active_acc_details values(macc,mbname);
+elsif ch=0 then
+dbms_output.put_line('Account is not active');
+end if;
+end
+
+3..
+Procedure:
+create or replace procedure proc_marks(mroll number, mname varchar,mmarks number)
+is begin
+if mmarks<=1500 and mmarks >=990 then
+insert into result values (mroll,mname,'DIST') ;
+elsif mmarks<=989 and mmarks>=900 then
+insert into result values(mroll,mname,'FC');
+elsif mmarks<=899 and mmarks>=825 then
+insert into result values(mroll,mname,'HSC');
+end if;
+end;
+pl/sql block:
+declare
+mroll result.roll%type;
+mname stud_marks.name%type;
+mmarks stud_marks.total_marks%type;
+begin
+mroll := &mroll;
+mname := '&mname';
+mmarks := &mmarks;
+select name,total_marks into mname,mmarks from stud_marks where name=mname and
+total_marks=mmarks;
+proc_marks(mroll,mname,mmarks);
+end
