@@ -1,0 +1,108 @@
+1. Create following Tables
+cust_mstr(cust_no,fname,lname)
+add_dets(code_no,add1,add2,state,city,pincode)
+Retrieve the address of customer Fname as 'xyz' and Lname as 'pqr'
+
+-->table query:
+
+create table cust_mstr(
+cust_no number(5) primary key,
+fname varchar(20),
+lname varchar(20));
+
+create table add_dets(
+cust_no number(5) refrences cust_mstr(cust_no),
+add1 varchar(20),
+add2 varchar(20),
+state varchar(20),
+city varchar(20),
+pincode number(6));
+
+insert into customer values(101,'xyz','pqr');
+
+insert into customer values(102,'abc','lmn');
+
+insert into address values(101,'pune','akurdi','MH','pune','411011');
+
+insert into address values(102,'mumbai','pimpri','Pune','123432');
+
+-->select add1,add2,state,city,pincode from add_dets where cust_no in(select cust_no from cust_mstr where fname='xyz' and lname='pqr');
+
+
+2.Create following Tables
+cust_mstr(custno,fname,lname)
+acc_fd_cust_dets(codeno,acc_fd_no)
+fd_dets(fd_sr_no,amt)
+List the customer holding fixed deposit of amount more than 5000
+
+
+-->select fname,lname from cust_mstr where cust_no in(select codeno from acc_fd_cust_dets where acc_fd_no in(select fd_sr_no from fd_dets where amt > 5000)
+
+
+3. Create following Tables
+emp_mstr(e_mpno,f_name,l_name,m_name,dept,desg,branch_no)
+branch_mstr(name,b_no)
+List the employee details along with branch names to which they belong
+
+-->select emp_mstr.f_name,emp_mstr.l_name,branch_mstr.name from emp_mstr inner join branch_mstr on emp_mstr.branch_no=branch_mstr.b_no);
+
+
+
+4. Create following Tables
+emp_mstr(emp_no,f_name,l_name,m_name,dept)
+cntc_dets(code_no,cntc_type,cntc_data)
+List the employee details along with contact details using left outer join & right join
+
+*left outer join
+
+--> select emp_mstr.f_name,emp_mstr.lname,cntc_dets.cntc_data from emp_mstr left join cntc_dets on emp_mstr.emp_no=cntc_dets.code_no
+
+
+*right join
+
+--> select emp_mstr.f_name,emp_mstr.lname,cntc_dets.cntc_data from emp_mstr right join cntc_dets on emp_mstr.emp_no=cntc_dets.code_no
+
+
+5. Create following Tables
+cust_mstr(cust_no,fname,lname)
+add_dets(code_no,pincode)
+List the customer who do not have bank branches in their vicinity.
+
+
+--> To list the customers who do not have bank branches in their vicinity, we need to define what "vicinity" means in this context. In this case, let's assume "vicinity" refers to customers whose pincode does not exist in the add_dets table.
+
+
+-->select fname,lname from cust where cust_no not in(select code_no from add_dets);
+
+
+
+6. 
+
+create table borrow(
+cust_name varchar(20),
+loan_no number(5)
+);
+
+CREATE TABLE deposit (
+  cust_name varchar(20),
+  acc_no number(5)
+);
+
+a) Create View on borrower table by selecting any two columns and perform insert update delete operations
+
+-->create view borrower_view as select cust_name,loan_no from borrow;
+
+*insert into borrower_view values('meera',501);
+*update borrower_view set loan_no=201 where cust_name='meera';
+*delete from borrower_view where loan_no=201;
+select * from borrow
+
+
+b) Create view on borrower and depositor table by selecting any one column from each table
+perform insert update delete operations
+--> same like above
+
+c) create updateable view on borrower table by selecting any two columns and perform insert update delete operations.
+--> same like above
+
+
