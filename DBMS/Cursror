@@ -1,0 +1,92 @@
+1..
+Pl/sql block:
+declare
+rows_aff number(3);
+begin
+update bank_accounts set acc_status='active' where acc_status='inactive';
+if sql%found then
+dbms_output.put_line('Status changes');
+elsif sql%notfound then
+dbms_output.put_line('No rows affected');
+end if;
+rows_aff := sql%rowcount;
+dbms_output.put_line('Total records changed : ' || rows_aff);
+end;
+
+2..
+pl/sql block:
+declare
+cursor crsr is select e_no,salary from e_emp where salary<(select avg(salary) from e_emp);
+meno e_emp.e_no%type;
+msal e_emp.salary%type;
+minc e_emp.salary%type;
+begin
+open crsr;
+if crsr%isopen then
+loop
+fetch crsr into meno,msal;
+exit when crsr%notfound;
+msal := msal+msal*0.1;
+insert into increment_salary values(meno,msal);
+end loop;
+end if;
+close crsr;
+end;
+
+3..
+pl/sql block:
+declare
+cursor crsr is select roll,att,status from stud21 where att<75;
+mroll stud21.roll%type;
+matt stud21.att%type;
+mstatus stud21.status%type;
+begin
+open crsr;
+if crsr%isopen then
+loop
+fetch crsr into mroll,matt,mstatus;
+exit when crsr%notfound;
+update stud21 set status='D' where roll=mroll;
+insert into d_stud values (mroll,matt);
+end loop;
+end if;
+close crsr;
+end;
+
+4..
+Pl/sql block:
+Declare
+cursor crsr is select roll from o_rollcall;
+cursor crsr_chk(mroll number) is select roll from n_rollcall where roll=mroll;
+mroll new_class.roll%type;
+v number(10);
+Begin
+Open crsr;
+Loop
+fetch crsr into mroll;
+Exit When crsr%NOTFOUND;
+Open crsr_chk(mroll);
+Fetch crsr_chk into v;
+if crsr_chk%FOUND Then
+dbms_output.put_line('roll' || ' ' || mroll || ' ' || 'exist');
+Else
+dbms_output.put_line('Adding roll '|| mroll);
+insert into n_rollcall values(mroll);
+End if;
+Close crsr_chk;
+End loop;
+Close crsr;
+End;
+
+5..
+pl/sql block:
+Declare
+Cursor crsr is select roll, att,status from stud21 where att<75;
+Begin
+for i IN crsr
+loop
+update stud21 set status='D' where
+roll=i.roll;
+insert into d_stud values(i.roll,i.att);
+end loop;
+End;
