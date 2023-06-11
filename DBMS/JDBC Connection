@@ -1,0 +1,88 @@
+import java.sql.*;
+import java.util.Scanner;
+
+class jdbc_conn{
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int empno,empdep,i;
+        String empname;
+
+        try{
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+
+            Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","system","admin");  
+
+            System.out.println("Enter choice \n1. Insert\n2. Update\n3. Delete\n4. Display");
+            int choice = sc.nextInt();
+
+            switch(choice){
+
+                case 1:
+                PreparedStatement stmt = con.prepareStatement("insert into emp values (?,?,?)");
+                System.out.println("Enter emp no : ");
+                empno = sc.nextInt();
+                System.out.println("Enter name : ");
+                empname = sc.next();
+                System.out.println("Enter DEPT : ");
+                empdep = sc.nextInt();
+
+                stmt.setInt(1, empno);
+                stmt.setString(2, empname);
+                stmt.setInt(3, empdep);
+
+                i = stmt.executeUpdate();
+                System.out.println(i + "rows inserted");
+
+                break;
+
+                case 2:
+                PreparedStatement stmt2 = con.prepareStatement("update emp set dept_no=? where emp_no=?");
+                System.out.println("Enter emp no : ");
+                empno = sc.nextInt();
+                System.out.println("Enter department no : ");
+                empdep = sc.nextInt();
+
+                stmt2.setInt(1, empdep);
+                stmt2.setInt(2, empno);
+
+                i = stmt2.executeUpdate();
+                System.out.println(i + " row(s) updated");
+
+                break;
+
+                case 3:
+                PreparedStatement stmt3 = con.prepareStatement("delete from emp where emp_no=?");
+                System.out.println("Enter emp no : ");
+                empno = sc.nextInt();
+                stmt3.setInt(1, empno);
+
+                i = stmt3.executeUpdate();
+                System.out.println(i + " row deleted");
+                break;
+
+
+                case 4:
+                Statement stmt4 = con.createStatement();
+                ResultSet rs = stmt4.executeQuery("select * from emp");
+
+                while(rs.next()){
+                    System.out.println(rs.getInt(1)+" "+rs.getString(2)+" "+rs.getInt(3));
+                }
+
+                break;
+
+                default:
+                System.out.println("Invalid choice!");
+            }
+
+
+
+
+            con.close();
+        }
+        catch(Exception e){
+            System.out.println(e);
+        }
+    }
+}
