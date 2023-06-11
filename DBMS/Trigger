@@ -1,0 +1,36 @@
+1..
+trigger:
+create or replace trigger t1 after update or delete on client_mstr
+for each row
+begin
+insert into audit_trade values (:old.id,:old.first_name,:old.last_name);
+end;
+
+2..
+Trigger:
+create or replace trigger t2 before insert or update on emp_tr
+for each row
+declare
+less_sal exception;
+pragma exception_init(less_sal,-20111);
+begin
+if :new.salary<50000 then
+raise_application_error(-20111,'Salary is less than 50000');
+else
+insert into tracking values (:new.e_no,:new.salary);
+end if;
+end;
+
+3..
+Trigger:
+CREATE OR REPLACE TRIGGER check_salary_trigger
+BEFORE INSERT ON emp_sal
+FOR EACH ROW
+DECLARE
+avg_salary float;
+BEGIN
+ avg_salary := (:NEW.sal1 + :NEW.sal2 + :NEW.sal3) / 3;
+ IF :NEW.sal1 > 50000 OR :NEW.sal2 > 50000 OR :NEW.sal3 > 50000 THEN
+ INSERT INTO emp_new (emp_no, avg_sal) VALUES (:NEW.emp_no, avg_salary);
+ END IF;
+END;
