@@ -15,7 +15,6 @@ class Jobs{
         return "Job ID: " + id + ", Deadline: " + deadline + ", Profit: " + profit;
     }
 }
-
 public class Ass2 {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -34,8 +33,7 @@ public class Ass2 {
 
         // Sort the arr in descending order using comparator
         arr.sort(Comparator.comparingInt((Jobs jobs) -> jobs.profit).reversed());
-
-
+        
         // find max deadline
         int maxDeadline = 0;
         for (Jobs job: arr) {
@@ -53,8 +51,8 @@ public class Ass2 {
 
         // initialise an array
         int[] deadlineBool = new int[maxDeadline+1];
-        Arrays.fill(deadlineBool,-1);
-
+        Arrays.fill(deadlineBool,0);
+        
         // logic
         int count =0;
         int profit =0;
@@ -62,7 +60,7 @@ public class Ass2 {
 
         for (Jobs job: arr){
             if (count < maxDeadline){
-                if (deadlineBool[job.deadline]==-1){
+                if (deadlineBool[job.deadline]==0){
                     deadlineBool[job.deadline] = 1;
                     profit+= job.profit;
                     count+=1;
@@ -70,7 +68,7 @@ public class Ass2 {
                 }
                 else {
                     for (int i = job.deadline;i>=1; i--){
-                        if (deadlineBool[i]==-1){
+                        if (deadlineBool[i]==0){
                             deadlineBool[i] = 1;
                             profit+= job.profit;
                             count+=1;
