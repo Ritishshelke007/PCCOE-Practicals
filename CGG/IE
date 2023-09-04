@@ -1,0 +1,88 @@
+#include <iostream>
+#include <graphics.h>
+#include <cmath>
+int main(){
+    int gDrive = DETECT; //also numeric value 0:(autodetect)
+    //*graphdriver is an integer that specifies the graphics driver to be used.
+
+    int gMode;
+ 
+
+    initgraph(&gDrive, &gMode, NULL);
+  
+     int centerX = getmaxx() / 2;
+    int centerY = getmaxy() / 2;
+    int earthx = 550;
+    int earthy = 200;
+
+  
+    int earthRadius = 20;
+   
+    int semiMajorAxis = 150; // Semi-major axis for the Sun's orbit
+    int semiMinorAxis = 100; // Semi-minor axis for the Sun's orbit
+
+    double adityasAngle = 0;
+   
+
+
+
+
+    while (!kbhit()) {
+        cleardevice();
+
+        // Calculate Aditya's position
+        int earthX = earthx-80 + static_cast<int>(semiMajorAxis * cos(adityasAngle));
+        int earthY = earthy + static_cast<int>(semiMinorAxis * sin(adityasAngle));
+
+        // Draw Earth's orbit (ellipse)
+        setcolor(WHITE);
+        rectangle(earthX-15, earthY-10, earthX+15, earthY+15);
+        floodfill(earthX-15, earthY-10, WHITE);
+    
+        ellipse(earthx-80, earthy, 0, 360, semiMajorAxis, semiMinorAxis);
+        ellipse(earthx-60, earthy, 0, 360, semiMajorAxis-20, semiMinorAxis-15);
+        ellipse(earthx-40, earthy, 0, 360, semiMajorAxis-40, semiMinorAxis-30);
+        ellipse(earthx-20, earthy, 0, 360, semiMajorAxis-60, semiMinorAxis-45);
+
+
+        // Earth with filled color
+        setcolor(BLUE);
+        circle(earthx, earthy, earthRadius);
+        setfillstyle(SOLID_FILL, BLUE);
+        floodfill(earthx, earthy, BLUE);
+
+
+// l1 point
+        setcolor(WHITE);
+        settextstyle(1, 0, 1);
+        outtextxy(100, 110, "L1 Point");
+
+        ellipse(100, 150, 0, 360, 80, 120);
+        setcolor(MAGENTA);
+        circle(100, 150, 10);
+        setfillstyle(SOLID_FILL, MAGENTA);
+        floodfill(100, 150, MAGENTA);
+
+
+        settextstyle(0, 0, 2);
+        outtextxy(170, 140, "1.5 million km");
+        setcolor(WHITE);
+      
+        line(110, 150, earthx-15, earthy);
+
+
+        rectangle(earthx-100, earthy+150, earthx-60, earthy+180);
+        outtextxy(earthx-40, earthy+160, "Aditya L1");
+
+        outtextxy(earthx-200, earthy-150, "Earth SOI Exit"); 
+        line(earthx-50, earthy-100, 170, 60);
+
+        // changing aditya's angle
+       delay(200);
+        adityasAngle += 0.01;
+       
+    }
+
+    getch();
+   //  closegraph();
+}
