@@ -1,0 +1,103 @@
+import java.sql.*;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String jdbcUrl = "jdbc:mysql://localhost:3306/mydb";
+        String username = "root";
+        String password = "Password123#@!";
+
+        try{
+            // Register the MySQL JDBC driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            // Establish a connection
+            Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
+             System.out.println("Connected to the database!");
+            do {
+                System.out.println("Enter choice :\n1. Display Users\n2. Add User\n3. Delete User\n4. Update \n: ");
+                int choice = sc.nextInt();
+
+                switch (choice){
+                    case 1:
+                        System.out.println("Records in Table :");
+                        PreparedStatement preparedStatement = connection.prepareStatement("select * from users");
+                        ResultSet rs = preparedStatement.executeQuery();
+                        while (rs.next()){
+                            System.out.println(rs.getString(1)+ " "+rs.getString(2));
+                        }
+                        break;
+
+                    case 2:
+                        System.out.println("Enter username : ");
+                        String user = sc.next();
+                        System.out.println("Enter email : ");
+                        String mail = sc.next();
+                        String insertQuery = "insert into users values (?,?)";
+                        PreparedStatement stmt = connection.prepareStatement(insertQuery);
+                        stmt.setString(1, user);
+                        stmt.setString(2, mail);
+                        int rowsAffected = stmt.executeUpdate();
+                        stmt.close();
+                        if (rowsAffected > 0)
+                        { System.out.println("Data inserted successfully!"); }
+                        else
+                        {
+                            System.out.println("Failed to insert data.");
+                        }
+                        break;
+
+                    case 3:
+                        System.out.println("Enter username to delete : ");
+                        String uname = sc.next();
+                        String deleteQuery = "delete from users where username = ?";
+                        PreparedStatement stmt2 = connection.prepareStatement(deleteQuery);
+                        stmt2.setString(1,uname);
+                        int deletedRow = stmt2.executeUpdate();
+                        stmt2.close();
+                        if (deletedRow > 0){
+                            System.out.println("Deleted from database");
+                        }
+                        break;
+
+                    case 4:
+                        System.out.println("Enter username : ");
+                        String uname2 = sc.next();
+                        System.out.println("Enter email to update : ");
+                        String mailUpdate = sc.next();
+                        String updateQuery = "update users set email=? where username=?";
+                        PreparedStatement stm3 = connection.prepareStatement(updateQuery);
+                        stm3.setString(1,mailUpdate);
+                        stm3.setString(2,uname2);
+                        int done = stm3.executeUpdate();
+                        stm3.close();
+
+                        if (done > 0){
+                            System.out.println("Update successful!");
+                        }
+                        else {
+                            System.out.println("Error occured");
+                        }
+                        break;
+
+
+
+                    default:
+                        System.out.println("Invalid choice : ");
+                }
+                System.out.println("Press 1 to continue: ");
+            }
+            while (sc.nextInt()==1);
+
+
+            // Insert data into the database
+
+
+
+             // Close the connection
+        connection.close();
+             System.out.println("Connection closed.");
+        } catch (ClassNotFoundException | SQLException e)
+        { e.printStackTrace(); }
+    }
+}
