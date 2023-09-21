@@ -1,4 +1,16 @@
 import java.util.*;
+/*
+0 1 2
+0 2 4
+1 3 7
+1 2 1
+3 5 1
+4 3 2
+4 5 5
+2 4 3
+*/
+
+dijkstra input
 
 public class Dijkstra {
     public static void main(String[] args) {
