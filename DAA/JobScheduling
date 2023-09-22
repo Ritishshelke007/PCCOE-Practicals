@@ -59,14 +59,6 @@ public class Ass2 {
         ArrayList <Jobs> resultArr = new ArrayList<>();
 
         for (Jobs job: arr){
-            if (count < maxDeadline){
-                if (deadlineBool[job.deadline]==0){
-                    deadlineBool[job.deadline] = 1;
-                    profit+= job.profit;
-                    count+=1;
-                    resultArr.add(job);
-                }
-                else {
                     for (int i = job.deadline;i>=1; i--){
                         if (deadlineBool[i]==0){
                             deadlineBool[i] = 1;
@@ -77,8 +69,7 @@ public class Ass2 {
                         }
                     }
                 }
-            }
-        }
+        
 
         System.out.println("\nSequence of Jobs according to maximum profit : ");
         for (Jobs job: resultArr){
