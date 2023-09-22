@@ -51,17 +51,6 @@ let profit = 0;
 let result = new Object({});
 
 jobArr.forEach((job)=>{
-    if (count<maxDeadline) {
-        if (deadBool[job.deadline]===-1) {
-            deadBool[job.deadline]=1;
-            profit+=job.profit;
-            console.log(profit);
-            count+=1;
-            console.log(deadBool);
-            console.log(job);
-            result = {...result,job}
-        }
-        else{
             for (let i = job.deadline; i >=1; i--) {
                 
                 if (deadBool[i]===-1) {
@@ -73,11 +62,10 @@ jobArr.forEach((job)=>{
                     console.log(job);
 
                     result = {...result,job}
+                    break;
                 }              
             }
         }
-    
-    }
 })
 
 console.log(`Total profit : ${profit}`);
