@@ -3,32 +3,6 @@
 #include<graphics.h> 
 #include<math.h>
 
-
-void translation(int a[20][20],int edges){
-    int tmatrix[20][20],result[20][20];
-    int i,tx,ty;
-    printf("Enter the translation factor Tx and Ty: ");
-    scanf("%d %d", &tx, &ty);
-
-    tmatrix[0][0] = tmatrix[1][1] = tmatrix[2][2] = 1;
-    tmatrix[0][1] = tmatrix[0][2] = tmatrix[1][0] = tmatrix[1][2] = 0;
-    tmatrix[2][0] = tx;
-    tmatrix[2][1] = ty;
-
-    // multiply a with tmatrix and store in result
-    for (i = 0; i < edges; i++)
-    {
-        for (int j = 0; j < 3; j++)
-        {
-            result[i][j] = 0;
-            for (int k = 0; k < 3; k++)
-            {
-                result[i][j] += a[i][k] * tmatrix[k][j];
-            }
-        }
-    }
-}
-
 void house(int a[20][20],int edges){
     int i;
 
