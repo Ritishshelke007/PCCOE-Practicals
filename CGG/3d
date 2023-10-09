@@ -1,0 +1,122 @@
+#include<stdio.h> 
+#include<stdlib.h> 
+#include<graphics.h> 
+#include<math.h>
+
+// 270 200 50    
+// 370 200 50
+// 370 300 50
+// 270 300 50
+// 270 200 -50
+// 370 200 -50
+// 370 300 -50
+// 270 300-50
+
+void drawPolygon(int a[20][20], int edges){
+    int i;
+
+    // line(getmaxx()/2,0,getmaxx()/2,getmaxy());
+    // line(0,getmaxy()/2,getmaxx(),getmaxy()/2);
+
+     for (i = 0; i < edges-1; i++)
+    {
+        line(a[i][0], a[i][1], a[i+1][0], a[i+1][1]);
+    }
+    line(a[0][0], a[0][1], a[i][0], a[i][1]);
+
+    // for (i = 0; i < edges-1; i++)
+    // {
+    //     line(320+a[i][0], 240-a[i][1], 320+a[i+1][0], 240-a[i+1][1]);
+    // }
+    // line(320+a[0][0], 240-a[0][1], 320+a[i][0], 240-a[i][1]);
+}
+
+void transormation(int a[20][20], int tmatrix[20][20], int edges, int code){
+    int result[20][20];
+
+    for (int i = 0; i < edges; i++)
+    {
+        for (int j = 0; j < code; j++)
+        {
+            result[i][j] = 0;
+            for (int k = 0; k < code; k++)
+            {
+                result[i][j] += a[i][k] * tmatrix[k][j];
+            }
+        }
+    }
+}
+
+
+int main()
+{
+     int gd = DETECT, gm;
+    initgraph(&gd, &gm, NULL);
+
+    printf("Enter the number of edges: ");
+    int edges;
+    scanf("%d",&edges);
+
+    int a[20][20],tmatrix[20][20],choice, conti;
+
+    /*
+    3 4 1
+    6 4 2
+    5 6 3
+    */
+    
+    printf("Enter the coordinates: ");
+    for (int i = 0; i < edges; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+           if (j>=3)
+           {
+            a[i][j] = 1;
+           }
+           else{
+            scanf("%d",&a[i][j]);
+           }
+        }
+
+        drawPolygon(a, edges);
+
+do
+{
+    printf("1. Translation\n2. Scaling\n3. Rotation : ");
+    scanf("%d",&choice);
+
+    switch (choice)
+    {
+    case 1:
+        printf("Enter the translation factor: ");
+        int tx,ty,tz;
+        scanf("%d %d %d",&tx,&ty,&tz);
+
+        tmatrix[0][0] = tmatrix[1][1] = tmatrix[2][2] = tmatrix[3][3] = 1;
+        tmatrix[0][1] = tmatrix[0][2] = tmatrix[0][3] = tmatrix[1][0] = tmatrix[1][2] = tmatrix[1][3] = tmatrix[2][0] = tmatrix[2][1] = tmatrix[2][3] = 0;
+        tmatrix[3][0] = tx;
+        tmatrix[3][1] = ty;
+        tmatrix[3][2] = tz;
+
+        transormation(a,tmatrix,edges,4);
+
+        
+
+        break;
+    
+    default:
+        break;
+    }
+
+    printf("Press 1 to continue : ");
+    scanf("%d",&conti);
+} while (conti==1);
+}
+    
+
+
+
+    delay(500000); 
+    return 0;
+}
