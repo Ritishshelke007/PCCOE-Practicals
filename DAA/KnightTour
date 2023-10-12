@@ -1,0 +1,67 @@
+import java.util.Scanner;
+
+public class Ass5 {
+    public static void main(String[] args) {
+       Scanner sc = new Scanner(System.in); 
+
+       System.out.println("Chessboard size : ");
+       int n = sc.nextInt();
+
+       int[][] matrix = new int[n+1][n+1];
+
+       // solution matrix initially fill with -1 and then 
+       // insert step number
+       for(int i=1; i<=n; i++){
+        for (int j = 1; j <=n; j++) {
+            matrix[i][j] = -1;
+        }
+       }
+
+       // initials 
+       int i = 1;
+       int j = 1;
+       int steps = 1;
+       int x_moves[] = {2,-2,-1,1,-2,2,-1,1};
+       int y_moves[] = {1,1,2,2,1,-1,-2,-2};
+       matrix[1][1] = 0;
+
+       if (knightTour(matrix, i, j, steps, x_moves, y_moves, n)) {
+            for (int x = 1; x <=n; x++) {
+                for (int y = 1; y <=n; y++) {
+                    System.out.println(matrix[x][y] + "\t");
+                }
+                System.out.println("\n");
+            }
+       }
+    }
+
+    private static boolean knightTour(int[][] matrix, int i, int j, int steps, int[] x_moves, int[] y_moves, int n) {
+        if (steps == n*n) {
+            return true;
+        }
+
+        for (int k = 0; k <8; k++) {
+            int next_x = i+x_moves[k];
+            int next_y = j+y_moves[k];
+
+            if(cell_valid(next_x,next_y,matrix,n)){
+                matrix[next_x][next_y] = steps;
+
+                if (knightTour(matrix, next_x, next_y, steps+1, x_moves, y_moves, n)) {
+                    return true;
+                }
+                matrix[next_x][next_y] = -1;  // back
+            }
+        }
+        return false;
+    }
+
+    private static boolean cell_valid(int next_x, int next_y, int[][] matrix,int n) {
+        if (next_x>=1 && next_x<=n && next_y>=1 && next_y<=n) {
+            if (matrix[next_x][next_y] == -1) {
+                return true;
+            } 
+        }
+        return false;
+    }
+}
