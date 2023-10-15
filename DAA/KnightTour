@@ -1,67 +1,80 @@
-import java.util.Scanner;
+import java.util.*;
 
-public class Ass5 {
+public class KnightTour{
     public static void main(String[] args) {
-       Scanner sc = new Scanner(System.in); 
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Size of Chessboard : ");
+        int n = sc.nextInt();
 
-       System.out.println("Chessboard size : ");
-       int n = sc.nextInt();
+        int[][] matrix = new int[n+1][n+1];
 
-       int[][] matrix = new int[n+1][n+1];
-
-       // solution matrix initially fill with -1 and then 
-       // insert step number
-       for(int i=1; i<=n; i++){
-        for (int j = 1; j <=n; j++) {
-            matrix[i][j] = -1;
-        }
-       }
-
-       // initials 
-       int i = 1;
-       int j = 1;
-       int steps = 1;
-       int x_moves[] = {2,-2,-1,1,-2,2,-1,1};
-       int y_moves[] = {1,1,2,2,1,-1,-2,-2};
-       matrix[1][1] = 0;
-
-       if (knightTour(matrix, i, j, steps, x_moves, y_moves, n)) {
-            for (int x = 1; x <=n; x++) {
-                for (int y = 1; y <=n; y++) {
-                    System.out.println(matrix[x][y] + "\t");
-                }
-                System.out.println("\n");
+        // fill with -1
+        for (int i=1; i<=n; i++){
+            for (int j=1; j<=n; j++){
+                matrix[i][j] = -1;
             }
-       }
+        }
+
+        // print matrix with -1
+//        for (int i=1; i<=n; i++){
+//            for (int j=1; j<=n ; j++){
+//                System.out.print(matrix[i][j] + " ");
+//            }
+//            System.out.println();
+//        }
+
+        // moves for knight
+        int[] x_moves = {2,1,-1,-2,-2,-1,1,2};
+        int[] y_moves = {1,2,2,1,-1,-2,-2,-1};
+
+        // initials
+
+        matrix[1][1] = 0;
+
+        int row = 1;
+        int col = 1;
+        int steps = 1;
+
+        if (solution(matrix, row, col, steps, x_moves, y_moves, n)){
+            for (int i=1; i<=n; i++){
+                for (int j=1; j<=n; j++){
+                    System.out.print(matrix[i][j] + "   ");
+                }
+                System.out.println();
+            }
+        }
+        else {
+            System.out.println("Solution is not possible !");
+        }
     }
 
-    private static boolean knightTour(int[][] matrix, int i, int j, int steps, int[] x_moves, int[] y_moves, int n) {
-        if (steps == n*n) {
+    private static boolean solution(int[][] matrix, int row, int col, int steps, int[] xMoves, int[] yMoves, int n) {
+
+        if (steps == n*n){
             return true;
         }
 
-        for (int k = 0; k <8; k++) {
-            int next_x = i+x_moves[k];
-            int next_y = j+y_moves[k];
+        for (int k=0; k<n; k++){
+            int next_row = row+xMoves[k];
+            int next_col = col+yMoves[k];
 
-            if(cell_valid(next_x,next_y,matrix,n)){
-                matrix[next_x][next_y] = steps;
-
-                if (knightTour(matrix, next_x, next_y, steps+1, x_moves, y_moves, n)) {
+            // if next move is valid then only check
+            if (isValidMove(next_row, next_col, matrix, n)){
+                matrix[next_row][next_col] = steps;
+                if (solution(matrix,next_row, next_col, steps+1, xMoves, yMoves,n)){
                     return true;
                 }
-                matrix[next_x][next_y] = -1;  // back
+                matrix[next_row][next_col] = -1;
             }
         }
+
         return false;
     }
 
-    private static boolean cell_valid(int next_x, int next_y, int[][] matrix,int n) {
-        if (next_x>=1 && next_x<=n && next_y>=1 && next_y<=n) {
-            if (matrix[next_x][next_y] == -1) {
-                return true;
-            } 
-        }
-        return false;
+    private static boolean isValidMove(int nextRow, int nextCol, int[][] matrix,int n) {
+// check whether the next move is valid or invalid
+        return nextRow >= 1 && nextRow <= n && nextCol >= 1 && nextCol <= n && matrix[nextRow][nextCol] == -1;
     }
+
+
 }
