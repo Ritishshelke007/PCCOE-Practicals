@@ -1,5 +1,35 @@
 import java.util.Scanner;
 
+/*
+INPUT:
+4
+
+0 8 -1 1
+-1 0 1 -1
+4 -1 0 -1
+-1 2 9 0
+
+output:
+0 3 4 1
+5 0 1 6
+4 7 0 5
+7 2 3 0
+
+input:
+4
+
+0 3 -1 7
+8 0 2 -1
+3 -1 0 1
+2 -1 -1 0
+
+output:
+0 3 5 6
+5 0 2 3
+3 6 0 1
+2 5 7 0
+*/
+
 public class FloydWarshall {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
