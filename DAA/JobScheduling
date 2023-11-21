@@ -1,6 +1,36 @@
 import java.util.*;
 import java.util.Scanner;
 
+/*
+INPUT:
+7
+
+J1 4 30
+J2 2 20
+J3 4 25
+J4 3 35
+J5 3 15
+J6 2 5
+J7 1 12
+
+OUTPUT:
+J4 J1 J3 J2
+PROFIT : 110
+
+INPUT:
+5
+
+J1 1 10
+J2 2 15
+J3 2 20
+J4 3 5
+J5 3 1
+
+OUTPUT:
+J3 J2 J4
+PROFIT: 40
+*/
+
 class Jobs{
     String id;
     int deadline;
