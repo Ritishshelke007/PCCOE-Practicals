@@ -12,12 +12,13 @@ int status;
 int conti;
 
 do{
-	printf("1. Create new process (using fork()) \n2. execl()\n3. Copy\n: ");
+	printf("1. Create new process (using fork()) \n2. execl()\n3. Copy\n4. grep: ");
 	scanf("%d", &choice);
 	
 	switch(choice){
 	
 	case 1:
+	printf("\nExecuting fork() command...\n");
 		pid_t pid = fork();
 		
 		if(pid == 0){
@@ -38,12 +39,14 @@ do{
 		break;
 		
 	case 2:
+		printf("\nExecuting execl() command...\n");
 		execl("/bin/ls", "ls","/home/pccoe/RITISH/",(char *)0);
 		perror("In execl()");
 		
 		break;
 		
 	case 3:
+		printf("\nExecuting cp command...\n");
 		char *command[3] = {"cp","a.txt","b.txt"};
 
 		if(strcmp(command[1], command[2])!=0){
@@ -71,6 +74,46 @@ do{
 		
 		break;
 		
+	case 4:
+	printf("\nExecuting following grep ( | ) command...\n");
+	printf("Enter string to search : ");
+	char input[20];
+	scanf("%s",input);
+	
+		char *com[] = {"grep","-c","hello","file.txt"};
+		com[2] = input;
+		for(int i=0; i<4; i++){
+			printf("%s ",com[i]);
+		}
+		
+		
+		
+		char fs2[100];
+		FILE *fptr2;
+		fptr2 = fopen(com[3],"r+");
+		
+		if(fptr2){
+			if(strcmp(com[1],"-c") == 0 ){
+				int count = 0;
+				
+				while(fscanf(fptr2,"%s",fs2) != EOF){
+					if(strcmp(input,fs2) == 0){
+						count++;
+					}
+				
+				}
+				
+			printf("\n\nWord Count of string %s = %d\n",com[2],count);
+			}			
+		}
+		else{
+		printf("File does not exist or failed to open!");
+		fclose(fptr2);	
+		
+		}
+		
+		break;
+		
 	default:
 		printf("Invalid choice! ");
 			
@@ -80,4 +123,6 @@ scanf("%d", &conti);
 	
 }
 while(conti==1);
+
+
 }
