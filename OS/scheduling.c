@@ -5,8 +5,7 @@
 
 
 int process[10], arrival_time[10], burst_time[10], waiting_time[10], turnaround_time[10], temp_burst_time[10], priority_time[10];
-float avg_waiting_time, avg_turnaround_time;
-int total_wait_time = 0, total_turnaround_time = 0;
+
 int n, i, j, temp, quant_time, y_n, sum, count, wait_time, tat_time;
 
 void part1() {
@@ -28,7 +27,27 @@ void part1() {
     }
 }
 
+void average() {
+
+    int total_wait_time = 0, total_turnaround_time = 0;
+    float avg_waiting_time = 0, avg_turnaround_time = 0;
+
+
+    for (int i = 0; i < n; i++)
+    {
+        total_wait_time += waiting_time[i];
+        total_turnaround_time += turnaround_time[i];
+    }
+    
+    avg_waiting_time = (float)total_wait_time / (float)n;
+    avg_turnaround_time = (float)total_turnaround_time / (float)n;
+    printf("\nAverage Waiting time : %f", avg_waiting_time);
+    printf("\nAverage Turnaround time : %f", avg_turnaround_time);
+}
+
 void part2() {
+    float avg_waiting_time = 0, avg_turnaround_time = 0;
+    int total_wait_time = 0, total_turnaround_time = 0;
     waiting_time[0] = 0;
     turnaround_time[0] = waiting_time[0] + burst_time[0];
     for (i = 1; i < n; i++) {
@@ -37,8 +56,8 @@ void part2() {
         total_wait_time += waiting_time[i];
         total_turnaround_time += turnaround_time[i];
     }
-    avg_waiting_time = (float)total_wait_time / n;
-    avg_turnaround_time = (float)total_turnaround_time / n;
+    avg_waiting_time = (float)total_wait_time / (float)n;
+    avg_turnaround_time = (float)total_turnaround_time /(float)n;
     printf("\np\t A.T\t B.T\t TAT\t WT");
 
     for (i = 0; i < n; i++) {
@@ -95,6 +114,8 @@ void sjf_scheduling() {
 }
 
 void round_robin_scheduling() {
+    float avg_waiting_time = 0, avg_turnaround_time = 0;
+    int total_wait_time = 0, total_turnaround_time = 0;
     printf("\nEnter no of Process : ");
     scanf("%d", &n);
     y_n = n;
@@ -150,6 +171,8 @@ void round_robin_scheduling() {
 }
 
 void priority_scheduling() {
+    float avg_waiting_time = 0, avg_turnaround_time = 0;
+    int total_wait_time = 0, total_turnaround_time = 0;
     printf("\nEnter no of Process : ");
     scanf("%d", &n);
 
@@ -258,14 +281,10 @@ void sjf_preemptive() {
 
     printf("Process ID  Burst Time  Waiting Time  Turnaround Time\n");
     for (int i = 0; i < n; i++) {
-        total_wait_time += waiting_time[i];
-        total_turnaround_time += turnaround_time[i];
         printf("%d\t\t%d\t\t%d\t\t%d\n", process[i], burst_time[i], waiting_time[i], turnaround_time[i]);
     }
 
-    printf("\nAverage Waiting Time %.2f\n", (float)total_wait_time / (float)n);
-    printf("Average Turnaround Time : %.2f\n", (float)total_turnaround_time / (float)n);
-
+    average();
 }
 
 int main() {
