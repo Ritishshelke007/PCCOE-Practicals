@@ -52,14 +52,9 @@ if (isset($_GET['search_name'])) {
 <div class="centerbox">
   <div class="main-form-container">
     <form id="" class="" method="get" action="">
-      <input type="text" class="main-input main-name" name="NAME" value="Search by name" onfocus="clearText(this)" onblur="replaceText(this)" /><input type="text" class="main-input main-location" name="LOCATION" value="Search by city or postal code" onfocus="clearText(this)" onblur="replaceText(this)" /><button type="button" class="main-btn">
-        <p class="search-small">SEARCH BY</p>
-        <p class="search-large">Name</p>
-      </button>
-      <ul class="search-description">
-        <li>By Location</li>
-        <li>By Name</li>
-      </ul>
+      <input type="text" class="main-input main-name" name="search_name"/>
+      
+    
       <input id="main-submit" class="" type="submit" value="Search" />
     </form>
   </div>
