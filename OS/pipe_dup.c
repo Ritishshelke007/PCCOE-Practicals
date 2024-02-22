@@ -7,15 +7,17 @@ int main(){
 
 	int choice,conti;
 	int pipedes[2];
+	int fd[2];
 	int returnstatus;
  	int pid;
+ 	int pid2;
 	char writemessages[2][20]={"Hi from Parent", "Hello"};
 	char readmessage[20];
 	int file_desc;
 	
 	do{
 	
-	printf("1. pipe()\n2. dup2()\nEnter Choice : ");
+	printf("\n1. pipe()\n2. dup2()\nEnter Choice : ");
 	scanf("%d",&choice);
 	
 	switch(choice){
@@ -58,14 +60,38 @@ int main(){
 	
 	case 2:
 	
-		file_desc = open("file.txt",O_WRONLY | O_APPEND); 
-	      
-	    	dup2(file_desc, 1) ;  
-		  	    
-	    	printf("Line 1 -> This will be printed in the file file.txt\n"); 
-	    	printf("Line 2 -> This will be printed in the file file.txt\n"); 
-	
-		exit(0);
+		
+		file_desc = open("file.txt", O_RDONLY);
+		dup2(file_desc, 0); // or can pass 0
+		close(file_desc);
+		pipe(fd);
+		
+		if( (pid2 = fork()) == 0){
+		printf("Sort executed by child process...\n");
+			
+			dup2(fd[1], 1);
+			close(fd[0]);
+			close(fd[1]);
+			
+			execl("/usr/bin/sort","sort",(char *) 0);
+			
+		}
+		
+		else if( pid > 0 ) { // parent process
+		printf("\nUniq executed by parent process...\n");
+		
+			dup2(fd[0], 0);
+			close(fd[1]);
+			close(fd[0]);
+			execl("/usr/bin/uniq","uniq",(char *) 0);
+		
+		}
+		
+		else {
+		
+			perror("fork()");
+			exit(1);
+		}
 	
 		break;
 		
@@ -76,17 +102,11 @@ int main(){
 	}
 	
 	
-	
-	
 	printf("Press 1 to continue : ");
 	scanf("%d",&conti);
 	}
 	while(conti == 1);
-	
-	
-	
-	
-	
+		
 	return 0;
 
 }
