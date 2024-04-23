@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>JavaScript Form Validation Demo</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <form id="signup" class="form">
+        <h1>Sign Up to Blogeeks</h1>
+        <div class="form-field">
+          <label for="username">Username:</label>
+          <input type="text" name="username" id="username" autocomplete="off" />
+          <small></small>
+        </div>
+
+        <div class="form-field">
+          <label for="email">Email:</label>
+          <input type="text" name="email" id="email" autocomplete="off" />
+          <small></small>
+        </div>
+
+        <div class="form-field">
+          <label for="phone">Phone:</label>
+          <input
+            type="tel"
+            name="phone"
+            id="phone"
+            autocomplete="off"
+            pattern="[0-9]+"
+          />
+          <small></small>
+        </div>
+
+        <div class="form-field">
+          <label for="password">Password:</label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            autocomplete="off"
+          />
+          <small></small>
+        </div>
+
+        <div class="form-field">
+          <label for="confirm-password">Confirm Password:</label>
+          <input
+            type="password"
+            name="confirm-password"
+            id="confirm-password"
+            autocomplete="off"
+          />
+          <small></small>
+        </div>
+
+        <div class="form-field">
+          <button type="submit" value="Sign Up" class="btn">
+            Sign up
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
